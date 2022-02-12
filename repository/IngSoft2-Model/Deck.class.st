@@ -21,6 +21,12 @@ Deck class >> default [
 ]
 
 { #category : #'instance creation' }
+Deck class >> empty [
+
+	^ self new initializeWith: {  }
+]
+
+{ #category : #'instance creation' }
 Deck class >> onlyAccelerationCards [
 
 	^ self new initializeWith: {Acceleration new}

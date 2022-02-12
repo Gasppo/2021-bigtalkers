@@ -12,7 +12,8 @@ Class {
 		'activeCards',
 		'lastCardUsed',
 		'lastEffect',
-		'deck'
+		'deck',
+		'discardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -69,6 +70,7 @@ BigTalkGame class >> validateNoPlayers: somePlayers [
 BigTalkGame >> accelerationCardUsedBy: aPlayer [ 
 
 self player: aPlayer usesCard: Acceleration new  on: players.
+self addCardToDiscardDeck: Acceleration new .
 ]
 
 { #category : #'accessing - game' }
@@ -83,6 +85,12 @@ BigTalkGame >> addActiveCard: aCard on: target [
 	target isCollection
 		ifTrue: [ target do: [ :player | activeCards add: aCard to: player ] ]
 		ifFalse: [ activeCards add: aCard to: target ]
+]
+
+{ #category : #private }
+BigTalkGame >> addCardToDiscardDeck: aCard [
+
+	discardDeck addCard: aCard
 ]
 
 { #category : #'effect-application' }
@@ -144,6 +152,8 @@ BigTalkGame >> assertGameIsNotFinished [
 BigTalkGame >> cancellationCardUsedBy: aPlayer targetting: target removing: aCancelledCard [ 
 
 self player: aPlayer usesCard: Cancellation new  on: {aCancelledCard.target}.
+self addCardToDiscardDeck: Cancellation new .
+self addCardToDiscardDeck: aCancelledCard .
 ]
 
 { #category : #playing }
@@ -171,6 +181,11 @@ BigTalkGame >> currentTurnPlayer [
 	^ currentPlayer
 ]
 
+{ #category : #'accessing - game' }
+BigTalkGame >> discardDeckSize [
+	^discardDeck cardsRemaining.
+]
+
 { #category : #playing }
 BigTalkGame >> drawFromDeck: aPlayer [
 
@@ -192,6 +207,7 @@ BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: 
 	board := aBoard.
 	board addPlayers: somePlayers.
 	deck := aDeck.
+	discardDeck := Deck empty.
 	self playersDrawStartingCards.
 	activeCards := ActiveCardController forPlayers: somePlayers.
 	lastEffect := NoEffect new.
@@ -286,12 +302,14 @@ BigTalkGame >> rankOf: aPlayer [
 BigTalkGame >> redoCardUsedBy: aPlayer [
 
 self player: aPlayer usesCard: Redo new  on: players.
+self addCardToDiscardDeck: Redo new .
 ]
 
 { #category : #'playing - card usage' }
 BigTalkGame >> redoCardUsedBy: aPlayer targetting: target [
 
 self player: aPlayer usesCard: Redo new  on: target.
+self addCardToDiscardDeck: Redo new .
 ]
 
 { #category : #'effect-application' }
@@ -304,6 +322,7 @@ BigTalkGame >> removeActiveCard: aCard from: target [
 BigTalkGame >> repeatCardUsedBy: aPlayer targetting: target [
 
 self player: aPlayer usesCard: Repeat new  on: target.
+self addCardToDiscardDeck: Repeat new .
 ]
 
 { #category : #'playing - card usage' }

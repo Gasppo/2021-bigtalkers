@@ -1,8 +1,45 @@
 Class {
 	#name : #DeckTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'player1',
+		'player2',
+		'player3',
+		'speedCard',
+		'overloadCard',
+		'accelerationCard',
+		'repeatCard',
+		'redoCard',
+		'cancellationCard'
+	],
 	#category : #'IngSoft2-Tests'
 }
+
+{ #category : #'testing - messages' }
+DeckTest >> certainDistributionOf: anItem [
+
+	| eventDistribution |
+	eventDistribution := OrderedCollection new.
+	eventDistribution add:
+		(DiscreteProbabilityEvent of: anItem havingProbability: 1).
+		^eventDistribution 
+]
+
+{ #category : #'testing - messages' }
+DeckTest >> setUp [
+
+	player1 := Player named: 'Gaspar'.
+	player2 := Player named: 'Martin'.
+	player3 := Player named: 'Carla'.
+
+	
+	speedCard := Speed new.
+	overloadCard := Overload new.
+	accelerationCard := Acceleration new.
+	repeatCard := Repeat new.
+	redoCard := Redo new.
+	cancellationCard := Cancellation new
+]
 
 { #category : #tests }
 DeckTest >> testDeckAddCards [
@@ -19,12 +56,10 @@ DeckTest >> testDeckAddCards [
 
 { #category : #tests }
 DeckTest >> testDeckRemoveByDrawingCards [
-	| aDeck eventsDistribution card1 card2| 
-	eventsDistribution := OrderedCollection new.
-	eventsDistribution
-		add: (DiscreteProbabilityEvent of: Acceleration new havingProbability: 1).
+	| aDeck accelerationCertain card1 card2| 
+	accelerationCertain := self certainDistributionOf: accelerationCard .
 		
-	aDeck := Deck withProbabilities: eventsDistribution usingCardAmount: 2.
+	aDeck := Deck withProbabilities: accelerationCertain usingCardAmount: 2.
 	card1 := aDeck drawWithoutReposition.
 	self assert: aDeck cardsRemaining equals: 1.
 	card2 := aDeck drawWithoutReposition.
@@ -33,12 +68,40 @@ DeckTest >> testDeckRemoveByDrawingCards [
 
 { #category : #tests }
 DeckTest >> testDeckStartsEmpty [
-	| aDeck eventsDistribution| 
-	eventsDistribution := OrderedCollection new.
-	eventsDistribution
-		add: (DiscreteProbabilityEvent of: Acceleration new havingProbability: 1).
-		
-	aDeck := Deck withProbabilities: eventsDistribution usingCardAmount: 0.
+	| aDeck accelerationCertain| 
 	
+	accelerationCertain := self certainDistributionOf: accelerationCard .
+	aDeck := Deck withProbabilities: accelerationCertain usingCardAmount: 0.
 	^self assert: aDeck cardsRemaining equals: 0.
+]
+
+{ #category : #tests }
+DeckTest >> testDiscardDeckHasTwoCards [
+	| aGame aDie aBoard aDice speedsDistribution speedDeck cancellationDeck cancelsDistribution|
+	
+	speedsDistribution := OrderedCollection new.
+	speedsDistribution
+		add: (DiscreteProbabilityEvent of: speedCard  havingProbability: 1).
+	
+	cancelsDistribution := OrderedCollection new.
+	cancelsDistribution
+		add: (DiscreteProbabilityEvent of: cancellationCard  havingProbability: 1).
+	
+	speedDeck := Deck withProbabilities: speedsDistribution usingCardAmount: 20.
+	cancellationDeck := Deck withProbabilities: cancelsDistribution usingCardAmount: 2.
+	player1 drawCardFrom: speedDeck.
+	player1 drawCardFrom: cancellationDeck.
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 6.
+	aGame := BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1.
+	aGame speedCardUsedBy: player1 targetting: player1.
+	aGame cancellationCardUsedBy: player1 targetting: player1 removing: speedCard.
+	self assert: aGame discardDeckSize equals: 2.
 ]
