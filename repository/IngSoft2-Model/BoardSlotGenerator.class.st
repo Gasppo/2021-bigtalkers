@@ -45,7 +45,7 @@ BoardSlotGenerator >> generate [
 
 { #category : #initialization }
 BoardSlotGenerator >> initializeWith: eventsDistribution [
-	"Coverage issue: Message in use in BoardSlotGenerator class >> basedOn: "
+
 	randomness := Random new.
 	eventsPool := OrderedCollection new.
 	eventsDistribution
