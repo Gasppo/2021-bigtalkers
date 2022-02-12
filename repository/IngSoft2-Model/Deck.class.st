@@ -62,6 +62,32 @@ Deck class >> using: cardTypes [
 	^ self new initializeWith: cardTypes
 ]
 
+{ #category : #'instance creation' }
+Deck class >> withProbabilities: eventsDistribution usingCardAmount: amountOfCards [
+
+	| cardDistribution generator|
+	
+	cardDistribution := OrderedCollection new.
+	generator := DistributionItemGenerator basedOn: eventsDistribution.
+	
+	
+	1 to: amountOfCards do: [ :index | cardDistribution add: (generator generate) ].
+		
+	^ self new initializeWith: cardDistribution
+]
+
+{ #category : #drawing }
+Deck >> addCard: aCard [
+	
+	cards add: aCard.
+]
+
+{ #category : #drawing }
+Deck >> cardsRemaining [
+
+	^ cards size
+]
+
 { #category : #drawing }
 Deck >> draw [
 
@@ -70,8 +96,16 @@ Deck >> draw [
 	^ drawnCard
 ]
 
-{ #category : #initialization }
-Deck >> initializeWith: cardTypes [
+{ #category : #drawing }
+Deck >> drawWithoutReposition [
 
-	cards := OrderedCollection withAll: cardTypes
+	| drawnCard |
+	drawnCard := cards removeLast.
+	^ drawnCard
+]
+
+{ #category : #initialization }
+Deck >> initializeWith: aCardCollection [
+	
+	cards := OrderedCollection withAll: aCardCollection
 ]

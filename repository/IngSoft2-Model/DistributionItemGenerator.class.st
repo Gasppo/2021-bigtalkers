@@ -1,8 +1,7 @@
 Class {
-	#name : #BoardSlotGenerator,
+	#name : #DistributionItemGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'slots',
 		'randomness',
 		'eventsPool'
 	],
@@ -10,20 +9,20 @@ Class {
 }
 
 { #category : #'instance creation' }
-BoardSlotGenerator class >> basedOn: eventsDistribution [
+DistributionItemGenerator class >> basedOn: eventsDistribution [
 
 	self validate: eventsDistribution.
 	^ self new initializeWith: eventsDistribution.
 ]
 
 { #category : #validation }
-BoardSlotGenerator class >> validate: eventsDistribution [
+DistributionItemGenerator class >> validate: eventsDistribution [
 
 	self validateTotalProbability: eventsDistribution
 ]
 
 { #category : #validation }
-BoardSlotGenerator class >> validateTotalProbability: eventsDistribution [
+DistributionItemGenerator class >> validateTotalProbability: eventsDistribution [
 
 	| probabilities totalProbability |
 	probabilities := eventsDistribution
@@ -36,7 +35,7 @@ BoardSlotGenerator class >> validateTotalProbability: eventsDistribution [
 ]
 
 { #category : #generating }
-BoardSlotGenerator >> generate [
+DistributionItemGenerator >> generate [
 
 	| events |
 	events := OrderedCollection new.
@@ -44,7 +43,7 @@ BoardSlotGenerator >> generate [
 ]
 
 { #category : #initialization }
-BoardSlotGenerator >> initializeWith: eventsDistribution [
+DistributionItemGenerator >> initializeWith: eventsDistribution [
 
 	randomness := Random new.
 	eventsPool := OrderedCollection new.

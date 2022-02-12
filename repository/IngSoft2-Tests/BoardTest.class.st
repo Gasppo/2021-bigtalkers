@@ -27,24 +27,6 @@ BoardTest >> testBoardCannotBeCreatedWithZeroSlots [
 ]
 
 { #category : #tests }
-BoardTest >> testBoardSlotGeneratorCannotBeBasedOnAnEventDistributionWithTotalProbabilitiesDifferentThanOne [
-
-	| eventsDistribution |
-	eventsDistribution := OrderedCollection new.
-	eventsDistribution
-		add: (DiscreteProbabilityEvent of: BoardSlot withNoEffect havingProbability: 0.38);
-		add: (DiscreteProbabilityEvent of: BoardSlot withSpeedUp havingProbability: 0.2);
-		add: (DiscreteProbabilityEvent of: BoardSlot withWormHole havingProbability: 0.2);
-		add: (DiscreteProbabilityEvent of: BoardSlot withMoonwalkWithTwoStepsBack havingProbability: 0.3);
-		add: (DiscreteProbabilityEvent of: BoardSlot withAtomicBomb havingProbability: 0.02);
-		add: (DiscreteProbabilityEvent of: BoardSlot withGrabCard havingProbability: 0.10).
-	self
-		should: [ BoardSlotGenerator basedOn: eventsDistribution ]
-		raise: Error
-		withMessage: 'All probabilities must sum 1'
-]
-
-{ #category : #tests }
 BoardTest >> testBoardSlotGeneratorGeneratesSlot [
 
 	|slotToUse eventsDistribution generator boardSlot|
@@ -52,7 +34,7 @@ BoardTest >> testBoardSlotGeneratorGeneratesSlot [
 	slotToUse := BoardSlot withMoonwalkWithTwoStepsBack.
 	eventsDistribution
 		add: (DiscreteProbabilityEvent of: slotToUse havingProbability: 1).
-	generator := BoardSlotGenerator basedOn: eventsDistribution.
+	generator := DistributionItemGenerator basedOn: eventsDistribution.
 	boardSlot := generator generate.
 	self assert: (boardSlot effect) equals: (slotToUse effect)
 ]
