@@ -27,12 +27,12 @@ CardTest >> setUp [
 	player1 := Player named: 'Gaspar'.
 	player2 := Player named: 'Martin'.
 	player3 := Player named: 'Carla'.
-	redoDeck := Deck onlyRedoCards.
-	speedDeck := Deck onlySpeedCards.
-	overloadDeck := Deck onlyOverloadCards.
-	repeatDeck := Deck onlyRepeatCards.
-	accelerationDeck := Deck onlyAccelerationCards.
-	cancellationDeck := Deck onlyCancellationCards.
+	redoDeck := TestingDeck onlyRedoCards.
+	speedDeck := TestingDeck onlySpeedCards.
+	overloadDeck := TestingDeck onlyOverloadCards.
+	repeatDeck := TestingDeck onlyRepeatCards.
+	accelerationDeck := TestingDeck onlyAccelerationCards.
+	cancellationDeck := TestingDeck onlyCancellationCards.
 	speedCard := Speed new.
 	overloadCard := Overload new.
 	accelerationCard := Acceleration new.
@@ -65,7 +65,7 @@ CardTest >> testAGamePlayerPlaysCardNotInHand [
 		usingDice: aDice
 		playedOn: aBoard
 		finishingAtLap: 1
-		usingDeck: Deck onlyOverloadCards .
+		usingDeck: TestingDeck onlyOverloadCards .
 	self
 		should: [ aGame speedCardUsedBy: player1 targetting: player2. ]
 		raise: Error
@@ -509,7 +509,7 @@ CardTest >> testPlayerCantPlayPermanentCardsOutsideTurn [
 		usingDice: aDice
 		playedOn: aBoard
 		finishingAtLap: 1
-		usingDeck: Deck onlySpeedCards.
+		usingDeck: TestingDeck onlySpeedCards.
 	aGame moveCurrentPlayer.
 	self
 		should: [ aGame speedCardUsedBy: player1 targetting: player2 ]
@@ -540,7 +540,7 @@ CardTest >> testPlayerFallsOnGrabCardGrabsSpeed [
 		usingDice: aDice
 		playedOn: aBoard
 		finishingAtLap: 1
-		usingDeck: Deck onlySpeedCards.
+		usingDeck: TestingDeck onlySpeedCards.
 	aGame speedCardUsedBy: player1 targetting: player2.
 	aGame speedCardUsedBy: player1 targetting: player2.
 	self

@@ -142,7 +142,18 @@ BigTalkGame >> applyWormHoleTo: aPlayer [
 	self playerMove: aPlayer slots: -4
 ]
 
-{ #category : #'private - validations' }
+{ #category : #assertions }
+BigTalkGame >> assertDeckNotEmpty [
+
+	deck cardsRemaining > 0 ifFalse: [ self assertDiscardDeckNotEmpty ]
+]
+
+{ #category : #assertions }
+BigTalkGame >> assertDiscardDeckNotEmpty [
+	discardDeck cardsRemaining > 0 ifTrue: [ self rebuildDeck ] ifFalse: [ Error signal: 'Cant draw from empty deck, and discard deck is empty' ]
+]
+
+{ #category : #assertions }
 BigTalkGame >> assertGameIsNotFinished [
 
 	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
@@ -154,6 +165,11 @@ BigTalkGame >> cancellationCardUsedBy: aPlayer targetting: target removing: aCan
 self player: aPlayer usesCard: Cancellation new  on: {aCancelledCard.target}.
 self addCardToDiscardDeck: Cancellation new .
 self addCardToDiscardDeck: aCancelledCard .
+]
+
+{ #category : #'accessing - deck' }
+BigTalkGame >> cardsRemainingOnDeck [
+	^deck cardsRemaining 
 ]
 
 { #category : #playing }
@@ -188,7 +204,7 @@ BigTalkGame >> discardDeckSize [
 
 { #category : #playing }
 BigTalkGame >> drawFromDeck: aPlayer [
-
+	self assertDeckNotEmpty.
 	aPlayer drawCardFrom: deck
 ]
 
@@ -296,6 +312,12 @@ BigTalkGame >> playersDrawStartingCards [
 BigTalkGame >> rankOf: aPlayer [
 
 	^ scoreboard rankOf: aPlayer
+]
+
+{ #category : #playing }
+BigTalkGame >> rebuildDeck [
+	deck := discardDeck shuffled.
+	discardDeck := Deck empty
 ]
 
 { #category : #'playing - card usage' }

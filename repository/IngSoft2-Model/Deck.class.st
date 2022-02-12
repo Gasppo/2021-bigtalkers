@@ -27,42 +27,6 @@ Deck class >> empty [
 ]
 
 { #category : #'instance creation' }
-Deck class >> onlyAccelerationCards [
-
-	^ self new initializeWith: {Acceleration new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyCancellationCards [
-
-	^ self new initializeWith: {Cancellation new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyOverloadCards [
-
-	^ self new initializeWith: {Overload new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyRedoCards [
-
-	^ self new initializeWith: {Redo new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyRepeatCards [
-
-	^ self new initializeWith: {Repeat new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlySpeedCards [
-
-	^ self new initializeWith: {Speed new}
-]
-
-{ #category : #'instance creation' }
 Deck class >> using: cardTypes [
 
 	^ self new initializeWith: cardTypes
@@ -114,4 +78,10 @@ Deck >> drawWithoutReposition [
 Deck >> initializeWith: aCardCollection [
 	
 	cards := OrderedCollection withAll: aCardCollection
+]
+
+{ #category : #drawing }
+Deck >> shuffled [
+
+	cards := cards shuffled
 ]
