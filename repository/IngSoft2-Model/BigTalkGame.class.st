@@ -19,8 +19,21 @@ Class {
 }
 
 { #category : #validation }
+BigTalkGame class >> assertAtLeastOneLap: lapNumber [
+
+	lapNumber > 0
+		ifFalse: [ Error signal: 'You need at least one lap per game' ]
+]
+
+{ #category : #validation }
 BigTalkGame class >> assertAtLeastOnePlayer: somePlayers [
 
+	somePlayers isEmpty
+		ifTrue: [ Error signal: 'You need at least one player to play' ]
+]
+
+{ #category : #validation }
+BigTalkGame class >> assertEnoughCardsOn: aDeck toStartWith: somePlayers [ 
 	somePlayers isEmpty
 		ifTrue: [ Error signal: 'You need at least one player to play' ]
 ]
@@ -38,32 +51,53 @@ BigTalkGame class >> assertNoDuplicatePlayers: somePlayers [
 { #category : #'instance creation' }
 BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber [
 
-	self validate: somePlayers.
-	^ self new
-		initializeWithPlayers: somePlayers
-		withDice: someDice
-		withBoard: aBoard
-		finishingAtLap: aLapNumber
-		withDeck: Deck default 
+	| parameters |
+	parameters := OrderedCollection withAll: { 
+			              somePlayers.
+			              someDice.
+			              aBoard.
+			              aLapNumber.
+			              Deck default }.
+			
+	self validateParameters: parameters.
+
+	^ true
 ]
 
 { #category : #'instance creation' }
 BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber usingDeck: aDeck [
 
-	self validate: somePlayers.
+	| parameters |
+	parameters := OrderedCollection withAll: { 
+			              somePlayers.
+			              someDice.
+			              aBoard.
+			              aLapNumber.
+			              aDeck }.
+	self validateParameters: parameters.
+
 	^ self new
-		initializeWithPlayers: somePlayers
-		withDice: someDice
-		withBoard: aBoard
-		finishingAtLap: aLapNumber
-		withDeck: aDeck
+		  initializeWithPlayers: somePlayers
+		  withDice: someDice
+		  withBoard: aBoard
+		  finishingAtLap: aLapNumber
+		  withDeck: aDeck
 ]
 
 { #category : #validation }
-BigTalkGame class >> validate: somePlayers [
-
-	self assertAtLeastOnePlayer: somePlayers.
-	self assertNoDuplicatePlayers: somePlayers
+BigTalkGame class >> validateParameters: parameterCollection [
+	|somePlayers  someDice  aBoard  aLapNumber  aDeck|
+	
+	somePlayers := parameterCollection at: 1.
+	someDice := parameterCollection at: 2.
+	aBoard := parameterCollection at: 3.
+	aLapNumber := parameterCollection at: 4.
+	aDeck := parameterCollection at: 5.
+	
+	
+	self assertAtLeastOnePlayer: somePlayers .
+	self assertNoDuplicatePlayers: somePlayers .
+	self assertAtLeastOneLap: aLapNumber .
 ]
 
 { #category : #'playing - card usage' }

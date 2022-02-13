@@ -37,7 +37,7 @@ DeckTest >> generateDefaultGame [
 
 	| aDie aBoard aDice |
 	aDie := LoadedDie rolling: 4.
-	aDice := Dice with: {aDie}.
+	aDice := Dice with: { aDie }.
 	aBoard := Board sizedWithNoEffects: 6.
 	^ BigTalkGame
 		  playedBy: { 
@@ -46,6 +46,7 @@ DeckTest >> generateDefaultGame [
 		  usingDice: aDice
 		  playedOn: aBoard
 		  finishingAtLap: 1
+		  usingDeck: Deck default
 ]
 
 { #category : #'testing - messages' }

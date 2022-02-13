@@ -40,7 +40,8 @@ GameTest >> testAGameWithScoreboardGetLeaderUsingRoll [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	aLeader := aGame leaderPosition.
 	self assert: (aLeader between: 1 and: 4)
