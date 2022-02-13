@@ -34,8 +34,8 @@ BigTalkGame class >> assertAtLeastOnePlayer: somePlayers [
 
 { #category : #validation }
 BigTalkGame class >> assertEnoughCardsOn: aDeck toStartWith: somePlayers [ 
-	somePlayers isEmpty
-		ifTrue: [ Error signal: 'You need at least one player to play' ]
+	aDeck cardsRemaining >= ((somePlayers size) * 2) 
+		ifFalse: [ Error signal: 'Not enough cards in deck to start game' ]
 ]
 
 { #category : #assertions }
@@ -49,31 +49,10 @@ BigTalkGame class >> assertNoDuplicatePlayers: somePlayers [
 ]
 
 { #category : #'instance creation' }
-BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber [
-
-	| parameters |
-	parameters := OrderedCollection withAll: { 
-			              somePlayers.
-			              someDice.
-			              aBoard.
-			              aLapNumber.
-			              Deck default }.
-			
-	self validateParameters: parameters.
-
-	^ true
-]
-
-{ #category : #'instance creation' }
 BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber usingDeck: aDeck [
 
 	| parameters |
-	parameters := OrderedCollection withAll: { 
-			              somePlayers.
-			              someDice.
-			              aBoard.
-			              aLapNumber.
-			              aDeck }.
+	parameters := OrderedCollection withAll: { somePlayers.someDice.aBoard.aLapNumber.aDeck }.
 	self validateParameters: parameters.
 
 	^ self new
@@ -97,7 +76,8 @@ BigTalkGame class >> validateParameters: parameterCollection [
 	
 	self assertAtLeastOnePlayer: somePlayers .
 	self assertNoDuplicatePlayers: somePlayers .
-	self assertAtLeastOneLap: aLapNumber .
+	self assertAtLeastOneLap: aLapNumber.
+	self assertEnoughCardsOn: aDeck toStartWith: somePlayers  
 ]
 
 { #category : #'playing - card usage' }

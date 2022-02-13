@@ -324,7 +324,8 @@ GameTest >> testGameCreatedUsingFixedSlotsFinishedWithTwoLaps [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 2.
+		finishingAtLap: 2
+		usingDeck: Deck default.
 	7 timesRepeat: [ aGame moveCurrentPlayer ].
 	self assert: aGame leader equals: player1.
 	self
@@ -370,7 +371,8 @@ GameTest >> testGameFinishedWithTwoLaps [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 2.
+		finishingAtLap: 2
+		usingDeck: Deck default.
 	4 timesRepeat: [ aGame moveCurrentPlayer ].
 	self
 		should: [ aGame moveCurrentPlayer ]
@@ -442,7 +444,8 @@ GameTest >> testGamePlayerOneFallsInMoonWalk [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 4.
+		finishingAtLap: 4
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentLapOf: player1) equals: 1.
 	aGame moveCurrentPlayer.
@@ -497,7 +500,8 @@ GameTest >> testGamePlayerOneFallsInSpeedUp [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 3.
+		finishingAtLap: 3
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 1.
 	self assert: (aGame currentLapOf: player1) equals: 1.

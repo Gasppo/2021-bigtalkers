@@ -174,6 +174,21 @@ DeckTest >> testGamePlayerTriesToDrawEmptyDeckAndDiscard [
 ]
 
 { #category : #tests }
+DeckTest >> testGameWithoutEnoughCardsOnDeckToStart [
+
+	| repeatDistribution fourCardRepeatDeck |
+	repeatDistribution := self certainDistributionOf: repeatCard.
+	fourCardRepeatDeck := Deck withProbabilities: repeatDistribution usingCardAmount: 3.
+
+	
+	self
+		should: [ self generateGameWithDeck: fourCardRepeatDeck . ]
+		raise: Error
+		withMessage: 'Not enough cards in deck to start game'.
+
+]
+
+{ #category : #tests }
 DeckTest >> testRebuildingDeckFromDiscard [
 
 	| repeatDistribution fiveCardRepeatDeck aGame |
