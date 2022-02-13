@@ -225,7 +225,7 @@ BigTalkGame >> currentTurnPlayer [
 	^ currentPlayer
 ]
 
-{ #category : #'accessing - game' }
+{ #category : #'accessing - deck' }
 BigTalkGame >> discardDeckSize [
 	^discardDeck cardsRemaining.
 ]
@@ -342,7 +342,7 @@ BigTalkGame >> rankOf: aPlayer [
 	^ scoreboard rankOf: aPlayer
 ]
 
-{ #category : #playing }
+{ #category : #'private - deck' }
 BigTalkGame >> rebuildDeck [
 	deck := discardDeck shuffled.
 	discardDeck := Deck empty
