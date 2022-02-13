@@ -8,6 +8,19 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertions }
+DistributionItemGenerator class >> assertTotalProbabilityEqualsOne: eventsDistribution [
+
+	| probabilities totalProbability |
+	probabilities := eventsDistribution
+		collect: [ :event | event probability ].
+	totalProbability := probabilities
+		inject: 0
+		into: [ :sum :each | sum + each ].
+	totalProbability = 1
+		ifFalse: [ Error signal: 'All probabilities must sum 1' ]
+]
+
 { #category : #'instance creation' }
 DistributionItemGenerator class >> basedOn: eventsDistribution [
 
@@ -18,20 +31,7 @@ DistributionItemGenerator class >> basedOn: eventsDistribution [
 { #category : #validation }
 DistributionItemGenerator class >> validate: eventsDistribution [
 
-	self validateTotalProbability: eventsDistribution
-]
-
-{ #category : #validation }
-DistributionItemGenerator class >> validateTotalProbability: eventsDistribution [
-
-	| probabilities totalProbability |
-	probabilities := eventsDistribution
-		collect: [ :event | event probability ].
-	totalProbability := probabilities
-		inject: 0
-		into: [ :sum :each | sum + each ].
-	totalProbability = 1
-		ifFalse: [ Error signal: 'All probabilities must sum 1' ]
+	self assertTotalProbabilityEqualsOne: eventsDistribution
 ]
 
 { #category : #generating }

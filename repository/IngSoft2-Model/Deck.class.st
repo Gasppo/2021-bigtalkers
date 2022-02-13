@@ -40,9 +40,7 @@ Deck class >> withProbabilities: eventsDistribution usingCardAmount: amountOfCar
 	cardDistribution := OrderedCollection new.
 	generator := DistributionItemGenerator basedOn: eventsDistribution.
 	
-	
 	1 to: amountOfCards do: [ :index | cardDistribution add: (generator generate) ].
-		
 	^ self new initializeWith: cardDistribution
 ]
 
@@ -56,14 +54,6 @@ Deck >> addCard: aCard [
 Deck >> cardsRemaining [
 
 	^ cards size
-]
-
-{ #category : #drawing }
-Deck >> draw [
-
-	| drawnCard |
-	drawnCard := cards at: (1 to: cards size) atRandom.
-	^ drawnCard
 ]
 
 { #category : #drawing }

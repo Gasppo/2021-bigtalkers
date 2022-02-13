@@ -7,17 +7,17 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #validation }
-Dice class >> validate: someDice [
-
-	self validateEmptyDiceCollection: someDice
-]
-
-{ #category : #validation }
-Dice class >> validateEmptyDiceCollection: someDice [
+{ #category : #assertions }
+Dice class >> assertUsingAtLeastOneDie: someDice [
 
 	someDice isEmpty
 		ifTrue: [ Error signal: 'Dice need to have at least one Die' ]
+]
+
+{ #category : #validation }
+Dice class >> validate: someDice [
+
+	self assertUsingAtLeastOneDie: someDice
 ]
 
 { #category : #'instance creation' }

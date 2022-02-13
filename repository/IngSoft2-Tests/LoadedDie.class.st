@@ -4,8 +4,15 @@ Class {
 	#instVars : [
 		'rollValue'
 	],
-	#category : #'IngSoft2-Model'
+	#category : #'IngSoft2-Tests'
 }
+
+{ #category : #validation }
+LoadedDie class >> assertRollNotNegative: anExpectedRoll [
+
+	anExpectedRoll negative
+		ifTrue: [ Error signal: 'A loaded die cannot have a negative result' ]
+]
 
 { #category : #'instance creation' }
 LoadedDie class >> rolling: anExpectedRoll [
@@ -17,15 +24,8 @@ LoadedDie class >> rolling: anExpectedRoll [
 { #category : #validation }
 LoadedDie class >> validate: anExpectedRoll [
 
-	self validateLoadedDieCannotHaveNegativeResult: anExpectedRoll
+	self assertRollNotNegative: anExpectedRoll
 
-]
-
-{ #category : #validation }
-LoadedDie class >> validateLoadedDieCannotHaveNegativeResult: anExpectedRoll [
-
-	anExpectedRoll negative
-		ifTrue: [ Error signal: 'A loaded die cannot have a negative result' ]
 ]
 
 { #category : #initialization }

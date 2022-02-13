@@ -7,17 +7,17 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #validation }
-Die class >> validate: aNumberOfSides [
-
-	self validateSides: aNumberOfSides
-]
-
-{ #category : #validation }
-Die class >> validateSides: aNumberOfSides [
+{ #category : #assertions }
+Die class >> assertAtLeastFourSides: aNumberOfSides [
 
 	aNumberOfSides < 4
 		ifTrue: [ Error signal: 'Dice have to have at least 4 sides' ]
+]
+
+{ #category : #validation }
+Die class >> validate: aNumberOfSides [
+
+	self assertAtLeastFourSides: aNumberOfSides
 ]
 
 { #category : #'instance creation' }

@@ -11,6 +11,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertions }
+Player class >> assertNotEmptyName: aName [
+
+	aName = ''
+		ifTrue: [ Error signal: 'A player cannot have an empty name' ]
+]
+
 { #category : #'instance creation' }
 Player class >> named: aName [
 
@@ -21,14 +28,7 @@ Player class >> named: aName [
 { #category : #validation }
 Player class >> validate: aName [
 
-	self validatePlayersNameCannotBeEmpty: aName
-]
-
-{ #category : #validation }
-Player class >> validatePlayersNameCannotBeEmpty: aName [
-
-	aName = ''
-		ifTrue: [ Error signal: 'A player cannot have an empty name' ]
+	self assertNotEmptyName: aName
 ]
 
 { #category : #'private - accessing' }
