@@ -10,7 +10,14 @@ Class {
 		'accelerationCard',
 		'repeatCard',
 		'redoCard',
-		'cancellationCard'
+		'cancellationCard',
+		'redoDeck',
+		'speedDeck',
+		'overloadDeck',
+		'repeatDeck',
+		'accelerationDeck',
+		'cancellationDeck',
+		'boostDeck'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -26,13 +33,52 @@ DeckTest >> certainDistributionOf: anItem [
 ]
 
 { #category : #'testing - messages' }
+DeckTest >> generateDefaultGame [
+
+	| aDie aBoard aDice |
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 6.
+	^ BigTalkGame
+		  playedBy: { 
+				  player1.
+				  player2 }
+		  usingDice: aDice
+		  playedOn: aBoard
+		  finishingAtLap: 1
+]
+
+{ #category : #'testing - messages' }
+DeckTest >> generateGameWithDeck: aDeck [
+
+	| aDie aBoard aDice |
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 6.
+	^ BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1
+		usingDeck: aDeck.
+]
+
+{ #category : #'testing - messages' }
 DeckTest >> setUp [
 
 	player1 := Player named: 'Gaspar'.
 	player2 := Player named: 'Martin'.
 	player3 := Player named: 'Carla'.
-
-	
+ 
+	redoDeck := TestingDeck onlyRedoCards.
+	speedDeck := TestingDeck onlySpeedCards.
+	overloadDeck := TestingDeck onlyOverloadCards.
+	repeatDeck := TestingDeck onlyRepeatCards.
+	accelerationDeck := TestingDeck onlyAccelerationCards.
+	cancellationDeck := TestingDeck onlyCancellationCards.
+	boostDeck := TestingDeck onlyBoostCards.
 	speedCard := Speed new.
 	overloadCard := Overload new.
 	accelerationCard := Acceleration new.
@@ -97,30 +143,14 @@ DeckTest >> testDeckStartsEmpty [
 
 { #category : #tests }
 DeckTest >> testDiscardDeckHasTwoCards [
-	| aGame aDie aBoard aDice speedsDistribution speedDeck cancellationDeck cancelsDistribution|
+	| aGame aDie aBoard aDice |
 	
-	speedsDistribution := OrderedCollection new.
-	speedsDistribution
-		add: (DiscreteProbabilityEvent of: speedCard  havingProbability: 1).
-	
-	cancelsDistribution := OrderedCollection new.
-	cancelsDistribution
-		add: (DiscreteProbabilityEvent of: cancellationCard  havingProbability: 1).
-	
-	speedDeck := Deck withProbabilities: speedsDistribution usingCardAmount: 20.
-	cancellationDeck := Deck withProbabilities: cancelsDistribution usingCardAmount: 2.
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: cancellationDeck.
 	aDie := LoadedDie rolling: 4.
 	aDice := Dice with: {aDie}.
 	aBoard := Board sizedWithNoEffects: 6.
-	aGame := BigTalkGame
-		playedBy:
-			{player1.
-			player2}
-		usingDice: aDice
-		playedOn: aBoard
-		finishingAtLap: 1.
+	aGame := self generateDefaultGame.
 	aGame speedCardUsedBy: player1 targetting: player1.
 	aGame cancellationCardUsedBy: player1 targetting: player1 removing: speedCard.
 	self assert: aGame discardDeckSize equals: 2.
@@ -129,23 +159,11 @@ DeckTest >> testDiscardDeckHasTwoCards [
 { #category : #tests }
 DeckTest >> testGamePlayerTriesToDrawEmptyDeckAndDiscard [
 
-	| repeatDistribution repeatDeck aGame aDie aBoard aDice |
+	| repeatDistribution fourCardRepeatDeck aGame |
 	repeatDistribution := self certainDistributionOf: repeatCard.
-	repeatDeck := Deck
-		              withProbabilities: repeatDistribution
-		              usingCardAmount: 4.
+	fourCardRepeatDeck := Deck withProbabilities: repeatDistribution usingCardAmount: 4.
 
-	aDie := LoadedDie rolling: 4.
-	aDice := Dice with: { aDie }.
-	aBoard := Board sizedWithNoEffects: 6.
-	aGame := BigTalkGame
-		         playedBy: { 
-				         player1.
-				         player2 }
-		         usingDice: aDice
-		         playedOn: aBoard
-		         finishingAtLap: 1
-		         usingDeck: repeatDeck.
+	aGame := self generateGameWithDeck: fourCardRepeatDeck .
 	
 	self
 		should: [ aGame drawFromDeck: player1.]
@@ -157,22 +175,11 @@ DeckTest >> testGamePlayerTriesToDrawEmptyDeckAndDiscard [
 { #category : #tests }
 DeckTest >> testRebuildingDeckFromDiscard [
 
-	| repeatDistribution repeatDeck aGame aDie aBoard aDice |
-	
-	repeatDistribution := self certainDistributionOf: repeatCard .
-	repeatDeck := Deck withProbabilities: repeatDistribution usingCardAmount: 5.
-	
-	aDie := LoadedDie rolling: 4.
-	aDice := Dice with: {aDie}.
-	aBoard := Board sizedWithNoEffects: 6.
-	aGame := BigTalkGame
-		playedBy:
-			{player1.
-			player2}
-		usingDice: aDice
-		playedOn: aBoard
-		finishingAtLap: 1
-		usingDeck: repeatDeck  .
+	| repeatDistribution fiveCardRepeatDeck aGame |
+	repeatDistribution := self certainDistributionOf: repeatCard.
+	fiveCardRepeatDeck := Deck withProbabilities: repeatDistribution usingCardAmount: 5.
+
+	aGame := self generateGameWithDeck: fiveCardRepeatDeck .
 	aGame repeatCardUsedBy: player1 targetting: player1.
 	aGame repeatCardUsedBy: player1 targetting: player1.
 	aGame moveCurrentPlayer.
