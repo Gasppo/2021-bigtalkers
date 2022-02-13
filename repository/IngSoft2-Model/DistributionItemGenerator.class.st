@@ -1,29 +1,15 @@
 Class {
-	#name : #BoardSlotGenerator,
+	#name : #DistributionItemGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'slots',
 		'randomness',
 		'eventsPool'
 	],
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-BoardSlotGenerator class >> basedOn: eventsDistribution [
-
-	self validate: eventsDistribution.
-	^ self new initializeWith: eventsDistribution.
-]
-
-{ #category : #validation }
-BoardSlotGenerator class >> validate: eventsDistribution [
-
-	self validateTotalProbability: eventsDistribution
-]
-
-{ #category : #validation }
-BoardSlotGenerator class >> validateTotalProbability: eventsDistribution [
+{ #category : #assertions }
+DistributionItemGenerator class >> assertTotalProbabilityEqualsOne: eventsDistribution [
 
 	| probabilities totalProbability |
 	probabilities := eventsDistribution
@@ -35,8 +21,21 @@ BoardSlotGenerator class >> validateTotalProbability: eventsDistribution [
 		ifFalse: [ Error signal: 'All probabilities must sum 1' ]
 ]
 
+{ #category : #'instance creation' }
+DistributionItemGenerator class >> basedOn: eventsDistribution [
+
+	self validate: eventsDistribution.
+	^ self new initializeWith: eventsDistribution.
+]
+
+{ #category : #validation }
+DistributionItemGenerator class >> validate: eventsDistribution [
+
+	self assertTotalProbabilityEqualsOne: eventsDistribution
+]
+
 { #category : #generating }
-BoardSlotGenerator >> generate [
+DistributionItemGenerator >> generate [
 
 	| events |
 	events := OrderedCollection new.
@@ -44,8 +43,8 @@ BoardSlotGenerator >> generate [
 ]
 
 { #category : #initialization }
-BoardSlotGenerator >> initializeWith: eventsDistribution [
-	"Coverage issue: Message in use in BoardSlotGenerator class >> basedOn: "
+DistributionItemGenerator >> initializeWith: eventsDistribution [
+
 	randomness := Random new.
 	eventsPool := OrderedCollection new.
 	eventsDistribution

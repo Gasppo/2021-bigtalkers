@@ -1,6 +1,6 @@
 Class {
 	#name : #Repeat,
-	#superclass : #Instant,
+	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
 

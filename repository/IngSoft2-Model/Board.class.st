@@ -8,6 +8,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertions }
+Board class >> assertAtLeastOneSlot: aNumberOfSlots [
+
+	aNumberOfSlots > 0
+		ifFalse: [ Error signal: 'Boards need at least one slot' ]
+]
+
 { #category : #'instance creation' }
 Board class >> sizedWithNoEffects: aNumberOfSlots [
 
@@ -21,15 +28,8 @@ Board class >> sizedWithNoEffects: aNumberOfSlots [
 { #category : #validation }
 Board class >> validate: aNumberOfSlots [
 
-	self validateMinimumSlots: aNumberOfSlots
+	self assertAtLeastOneSlot: aNumberOfSlots
 
-]
-
-{ #category : #validation }
-Board class >> validateMinimumSlots: aNumberOfSlots [
-
-	aNumberOfSlots > 0
-		ifFalse: [ Error signal: 'Boards need at least one slot' ]
 ]
 
 { #category : #'instance creation' }

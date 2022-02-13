@@ -21,57 +21,51 @@ Deck class >> default [
 ]
 
 { #category : #'instance creation' }
-Deck class >> onlyAccelerationCards [
+Deck class >> empty [
 
-	^ self new initializeWith: {Acceleration new}
+	^ self new initializeWith: {  }
 ]
 
 { #category : #'instance creation' }
-Deck class >> onlyCancellationCards [
+Deck class >> withProbabilities: eventsDistribution usingCardAmount: amountOfCards [
 
-	^ self new initializeWith: {Cancellation new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyOverloadCards [
-
-	^ self new initializeWith: {Overload new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyRedoCards [
-
-	^ self new initializeWith: {Redo new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlyRepeatCards [
-
-	^ self new initializeWith: {Repeat new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> onlySpeedCards [
-
-	^ self new initializeWith: {Speed new}
-]
-
-{ #category : #'instance creation' }
-Deck class >> using: cardTypes [
-
-	^ self new initializeWith: cardTypes
+	| cardDistribution generator|
+	
+	cardDistribution := OrderedCollection new.
+	generator := DistributionItemGenerator basedOn: eventsDistribution.
+	
+	1 to: amountOfCards do: [ :index | cardDistribution add: (generator generate) ].
+	^ self new initializeWith: cardDistribution
 ]
 
 { #category : #drawing }
-Deck >> draw [
+Deck >> addCard: aCard [
+	
+	cards add: aCard.
+]
+
+{ #category : #drawing }
+Deck >> cardsRemaining [
+
+	^ cards size
+]
+
+{ #category : #drawing }
+Deck >> drawWithoutReposition [
 
 	| drawnCard |
-	drawnCard := cards at: (1 to: cards size) atRandom.
+	drawnCard := cards removeLast.
 	^ drawnCard
 ]
 
 { #category : #initialization }
-Deck >> initializeWith: cardTypes [
+Deck >> initializeWith: aCardCollection [
+	
+	cards := OrderedCollection withAll: aCardCollection
+]
 
-	cards := OrderedCollection withAll: cardTypes
+{ #category : #drawing }
+Deck >> shuffled [
+
+	cards := cards shuffled
 ]

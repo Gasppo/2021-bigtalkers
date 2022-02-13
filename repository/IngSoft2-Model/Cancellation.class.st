@@ -1,6 +1,6 @@
 Class {
 	#name : #Cancellation,
-	#superclass : #Instant,
+	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
 
@@ -13,9 +13,15 @@ Cancellation >> applyOn: aGame to: target [
 	aGame removeActiveCard: cancelledCard from: player
 ]
 
+{ #category : #assertions }
+Cancellation >> assertActiveCardsAvailable: aGame [
+
+	aGame activeCardStack isEmpty ifTrue: [ 
+		Error signal: 'Cant play cancellation with no active cards in game' ]
+]
+
 { #category : #'private - validations' }
 Cancellation >> playableBy: aPlayer on: aGame affecting: target [
 	
-	aGame activeCardStack isEmpty ifTrue: [ Error signal: 'Cant play cancellation with no active cards in game' ]
-	
+	self assertActiveCardsAvailable: aGame
 ]

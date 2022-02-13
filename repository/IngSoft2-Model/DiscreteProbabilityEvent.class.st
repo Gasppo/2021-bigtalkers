@@ -8,6 +8,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertions }
+DiscreteProbabilityEvent class >> assertPositiveProbability: aProbability [
+
+	aProbability > 0
+		ifFalse: [ Error signal: 'Probabilities must be positive' ]
+]
+
 { #category : #'instance creation' }
 DiscreteProbabilityEvent class >> of: anEvent havingProbability: anEventProbability [
 
@@ -18,19 +25,12 @@ DiscreteProbabilityEvent class >> of: anEvent havingProbability: anEventProbabil
 { #category : #validation }
 DiscreteProbabilityEvent class >> validate: aProbability [
 
-	self validatePositiveProbability: aProbability
-]
-
-{ #category : #validation }
-DiscreteProbabilityEvent class >> validatePositiveProbability: aProbability [
-
-	aProbability > 0
-		ifFalse: [ Error signal: 'Probabilities must be positive' ]
+	self assertPositiveProbability: aProbability
 ]
 
 { #category : #'accessing - variables' }
 DiscreteProbabilityEvent >> event [
-	"Coverage issue: Message in use in BoardSlotGenerator >> initializeWith: "
+	
 	^event
 ]
 

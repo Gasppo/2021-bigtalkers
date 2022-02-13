@@ -17,7 +17,7 @@ GameTest >> setUp [
 	player3 := Player named: 'Carla'
 ]
 
-{ #category : #asserting }
+{ #category : #assertions }
 GameTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErrorMessage [
 
 	self

@@ -12,10 +12,28 @@ Class {
 		'activeCards',
 		'lastCardUsed',
 		'lastEffect',
-		'deck'
+		'deck',
+		'discardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #validation }
+BigTalkGame class >> assertAtLeastOnePlayer: somePlayers [
+
+	somePlayers isEmpty
+		ifTrue: [ Error signal: 'You need at least one player to play' ]
+]
+
+{ #category : #assertions }
+BigTalkGame class >> assertNoDuplicatePlayers: somePlayers [
+
+	| somePlayersNames |
+	somePlayersNames := Set
+		withAll: (somePlayers collect: [ :player | player playerName ]).
+	somePlayers size ~= somePlayersNames size
+		ifTrue: [ Error signal: 'There can not be two players with the same name' ]
+]
 
 { #category : #'instance creation' }
 BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber [
@@ -44,31 +62,15 @@ BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard 
 { #category : #validation }
 BigTalkGame class >> validate: somePlayers [
 
-	self validateNoPlayers: somePlayers.
-	self validateDuplicatePlayers: somePlayers
-]
-
-{ #category : #validation }
-BigTalkGame class >> validateDuplicatePlayers: somePlayers [
-
-	| somePlayersNames |
-	somePlayersNames := Set
-		withAll: (somePlayers collect: [ :player | player playerName ]).
-	somePlayers size ~= somePlayersNames size
-		ifTrue: [ Error signal: 'There can not be two players with the same name' ]
-]
-
-{ #category : #validation }
-BigTalkGame class >> validateNoPlayers: somePlayers [
-
-	somePlayers isEmpty
-		ifTrue: [ Error signal: 'You need at least one player to play' ]
+	self assertAtLeastOnePlayer: somePlayers.
+	self assertNoDuplicatePlayers: somePlayers
 ]
 
 { #category : #'playing - card usage' }
 BigTalkGame >> accelerationCardUsedBy: aPlayer [ 
 
 self player: aPlayer usesCard: Acceleration new  on: players.
+self addCardToDiscardDeck: Acceleration new .
 ]
 
 { #category : #'accessing - game' }
@@ -83,6 +85,12 @@ BigTalkGame >> addActiveCard: aCard on: target [
 	target isCollection
 		ifTrue: [ target do: [ :player | activeCards add: aCard to: player ] ]
 		ifFalse: [ activeCards add: aCard to: target ]
+]
+
+{ #category : #private }
+BigTalkGame >> addCardToDiscardDeck: aCard [
+
+	discardDeck addCard: aCard
 ]
 
 { #category : #'effect-application' }
@@ -134,16 +142,48 @@ BigTalkGame >> applyWormHoleTo: aPlayer [
 	self playerMove: aPlayer slots: -4
 ]
 
-{ #category : #'private - validations' }
+{ #category : #assertions }
+BigTalkGame >> assertDeckNotEmpty [
+
+	deck cardsRemaining > 0 ifFalse: [ self assertDiscardDeckNotEmpty ]
+]
+
+{ #category : #assertions }
+BigTalkGame >> assertDiscardDeckNotEmpty [
+	discardDeck cardsRemaining > 0 ifTrue: [ self rebuildDeck ] ifFalse: [ Error signal: 'Cant draw from empty deck, and discard deck is empty' ]
+]
+
+{ #category : #assertions }
 BigTalkGame >> assertGameIsNotFinished [
 
 	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
+]
+
+{ #category : #'effect-application' }
+BigTalkGame >> boostActiveCard: aCard from: target [
+
+	activeCards boost: aCard from: target
+]
+
+{ #category : #'playing - card usage' }
+BigTalkGame >> boostCardUsedBy: aPlayer targetting: target boosting: aBoostedCard [ 
+
+self player: aPlayer usesCard: Boost new  on: {aBoostedCard.target}.
+self addCardToDiscardDeck: Boost new .
+
 ]
 
 { #category : #'playing - card usage' }
 BigTalkGame >> cancellationCardUsedBy: aPlayer targetting: target removing: aCancelledCard [ 
 
 self player: aPlayer usesCard: Cancellation new  on: {aCancelledCard.target}.
+self addCardToDiscardDeck: Cancellation new .
+self addCardToDiscardDeck: aCancelledCard .
+]
+
+{ #category : #'accessing - deck' }
+BigTalkGame >> cardsRemainingOnDeck [
+	^deck cardsRemaining 
 ]
 
 { #category : #playing }
@@ -153,27 +193,32 @@ BigTalkGame >> changeTurn [
 	currentPlayer := turn next
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentLapOf: aPlayer [
 
 	^ board currentLapOf: aPlayer
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentSlotOf: aPlayer [
 
 	^ board currentSlotOf: aPlayer
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentTurnPlayer [
 
 	^ currentPlayer
 ]
 
+{ #category : #'accessing - game' }
+BigTalkGame >> discardDeckSize [
+	^discardDeck cardsRemaining.
+]
+
 { #category : #playing }
 BigTalkGame >> drawFromDeck: aPlayer [
-
+	self assertDeckNotEmpty.
 	aPlayer drawCardFrom: deck
 ]
 
@@ -192,6 +237,7 @@ BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: 
 	board := aBoard.
 	board addPlayers: somePlayers.
 	deck := aDeck.
+	discardDeck := Deck empty.
 	self playersDrawStartingCards.
 	activeCards := ActiveCardController forPlayers: somePlayers.
 	lastEffect := NoEffect new.
@@ -276,22 +322,30 @@ BigTalkGame >> playersDrawStartingCards [
 			player drawCardFrom: deck ]
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> rankOf: aPlayer [
 
 	^ scoreboard rankOf: aPlayer
+]
+
+{ #category : #playing }
+BigTalkGame >> rebuildDeck [
+	deck := discardDeck shuffled.
+	discardDeck := Deck empty
 ]
 
 { #category : #'playing - card usage' }
 BigTalkGame >> redoCardUsedBy: aPlayer [
 
 self player: aPlayer usesCard: Redo new  on: players.
+self addCardToDiscardDeck: Redo new .
 ]
 
 { #category : #'playing - card usage' }
 BigTalkGame >> redoCardUsedBy: aPlayer targetting: target [
 
 self player: aPlayer usesCard: Redo new  on: target.
+self addCardToDiscardDeck: Redo new .
 ]
 
 { #category : #'effect-application' }
@@ -304,6 +358,7 @@ BigTalkGame >> removeActiveCard: aCard from: target [
 BigTalkGame >> repeatCardUsedBy: aPlayer targetting: target [
 
 self player: aPlayer usesCard: Repeat new  on: target.
+self addCardToDiscardDeck: Repeat new .
 ]
 
 { #category : #'playing - card usage' }

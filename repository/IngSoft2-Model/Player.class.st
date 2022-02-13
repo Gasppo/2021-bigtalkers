@@ -11,6 +11,13 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertions }
+Player class >> assertNotEmptyName: aName [
+
+	aName = ''
+		ifTrue: [ Error signal: 'A player cannot have an empty name' ]
+]
+
 { #category : #'instance creation' }
 Player class >> named: aName [
 
@@ -21,21 +28,21 @@ Player class >> named: aName [
 { #category : #validation }
 Player class >> validate: aName [
 
-	self validatePlayersNameCannotBeEmpty: aName
+	self assertNotEmptyName: aName
 ]
 
-{ #category : #validation }
-Player class >> validatePlayersNameCannotBeEmpty: aName [
-
-	aName = ''
-		ifTrue: [ Error signal: 'A player cannot have an empty name' ]
+{ #category : #'private - accessing' }
+Player >> assertDeckNotEmpty: aDeck [
+	
+ aDeck cardsRemaining > 0 ifFalse: [ Error signal: 'Cant draw from empty deck' ]
 ]
 
-{ #category : #'accessing - cards' }
+{ #category : #'private - accessing' }
 Player >> drawCardFrom: aDeck [
 
 	| newCard |
-	newCard := aDeck draw.
+	self assertDeckNotEmpty: aDeck.
+	newCard := aDeck drawWithoutReposition .
 	hand add: newCard
 ]
 

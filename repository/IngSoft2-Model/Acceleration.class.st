@@ -4,15 +4,20 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'accessing - effect' }
-Acceleration >> effect [
+{ #category : #assertions }
+Acceleration >> assertIsTurnOf: aPlayer for: aGame [ 
 
-	^ 1
+	aGame currentTurnPlayer  ~= aPlayer ifTrue: [ Error
+				signal: 'Players can only play permanent cards during their turn' ].
+]
+
+{ #category : #initialization }
+Acceleration >> initialize [ 
+	effect := 1
 ]
 
 { #category : #'private - validations' }
 Acceleration >> playableBy: aPlayer on: aGame affecting: target [
 
-	aGame currentTurnPlayer  ~= aPlayer ifTrue: [ Error
-				signal: 'Players can only play permanent cards during their turn' ].
+	self assertIsTurnOf: aPlayer for: aGame 
 ]
