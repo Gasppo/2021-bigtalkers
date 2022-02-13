@@ -1,6 +1,6 @@
 Class {
 	#name : #Boost,
-	#superclass : #Instant,
+	#superclass : #Card,
 	#category : #'IngSoft2-Model'
 }
 
@@ -13,8 +13,13 @@ Boost >> applyOn: aGame to: target [
 	aGame boostActiveCard: boostedCard from: player
 ]
 
+{ #category : #assertions }
+Boost >> assertActiveCardsAvailable: aGame [
+	aGame activeCardStack isEmpty ifTrue: [ Error signal: 'Cant play boost with no active cards in game' ]
+]
+
 { #category : #'private - validations' }
 Boost >> playableBy: aPlayer on: aGame affecting: target [
 	
-	aGame activeCardStack isEmpty ifTrue: [ Error signal: 'Cant play boost with no active cards in game' ]
+	self assertActiveCardsAvailable: aGame.
 ]

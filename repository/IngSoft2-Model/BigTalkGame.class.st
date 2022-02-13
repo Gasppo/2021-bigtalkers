@@ -18,6 +18,23 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #validation }
+BigTalkGame class >> assertAtLeastOnePlayer: somePlayers [
+
+	somePlayers isEmpty
+		ifTrue: [ Error signal: 'You need at least one player to play' ]
+]
+
+{ #category : #assertions }
+BigTalkGame class >> assertNoDuplicatePlayers: somePlayers [
+
+	| somePlayersNames |
+	somePlayersNames := Set
+		withAll: (somePlayers collect: [ :player | player playerName ]).
+	somePlayers size ~= somePlayersNames size
+		ifTrue: [ Error signal: 'There can not be two players with the same name' ]
+]
+
 { #category : #'instance creation' }
 BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard finishingAtLap: aLapNumber [
 
@@ -45,25 +62,8 @@ BigTalkGame class >> playedBy: somePlayers usingDice: someDice playedOn: aBoard 
 { #category : #validation }
 BigTalkGame class >> validate: somePlayers [
 
-	self validateNoPlayers: somePlayers.
-	self validateDuplicatePlayers: somePlayers
-]
-
-{ #category : #validation }
-BigTalkGame class >> validateDuplicatePlayers: somePlayers [
-
-	| somePlayersNames |
-	somePlayersNames := Set
-		withAll: (somePlayers collect: [ :player | player playerName ]).
-	somePlayers size ~= somePlayersNames size
-		ifTrue: [ Error signal: 'There can not be two players with the same name' ]
-]
-
-{ #category : #validation }
-BigTalkGame class >> validateNoPlayers: somePlayers [
-
-	somePlayers isEmpty
-		ifTrue: [ Error signal: 'You need at least one player to play' ]
+	self assertAtLeastOnePlayer: somePlayers.
+	self assertNoDuplicatePlayers: somePlayers
 ]
 
 { #category : #'playing - card usage' }
