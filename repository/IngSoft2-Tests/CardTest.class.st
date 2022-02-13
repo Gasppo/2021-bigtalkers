@@ -93,7 +93,7 @@ CardTest >> testAGamePlayerPlaysCardNotInHand [
 { #category : #tests }
 CardTest >> testAGameWithACancellationAndNoActiveCards [
 
-	| aGame aDie aBoard aDice aLeader |
+	| aGame aLeader |
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: cancellationDeck.
 	aGame := self generateDefaultGame.
@@ -109,7 +109,7 @@ CardTest >> testAGameWithACancellationAndNoActiveCards [
 { #category : #tests }
 CardTest >> testAGameWithASpeedCard [
 
-	| aGame aDie aBoard aDice aLeader |
+	| aGame aLeader |
 	player1 drawCardFrom: speedDeck.
 	aGame := self generateDefaultGame.
 	aGame speedCardUsedBy: player1 targetting: player1.
@@ -121,7 +121,7 @@ CardTest >> testAGameWithASpeedCard [
 { #category : #tests }
 CardTest >> testAGameWithASpeedCardAndBoost [
 
-	| aGame aDie aBoard aDice aLeader |
+	| aGame aLeader |
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: boostDeck.
 	aDie := LoadedDie rolling: 4.
@@ -138,7 +138,7 @@ CardTest >> testAGameWithASpeedCardAndBoost [
 { #category : #tests }
 CardTest >> testAGameWithASpeedCardAndCancellation [
 
-	| aGame aDie aBoard aDice aLeader |
+	| aGame aLeader |
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: cancellationDeck.
 	aGame := self generateDefaultGame.
@@ -319,7 +319,7 @@ CardTest >> testAGameWithAnOverloadCard [
 { #category : #tests }
 CardTest >> testAGameWithAnOverloadCardAndBoost [
 
-	| aGame aDie aBoard aDice aLeader |
+	| aGame aLeader |
 	player1 drawCardFrom: overloadDeck.
 	player1 drawCardFrom: boostDeck.
 	aDie := LoadedDie rolling: 8.
