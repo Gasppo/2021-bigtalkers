@@ -96,7 +96,7 @@ CardTest >> testAGameWithACancellationAndNoActiveCards [
 	| aGame aDie aBoard aDice aLeader |
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: cancellationDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	self
 		should: [ aGame cancellationCardUsedBy: player1 targetting: player2 removing: speedCard .]
 		raise: Error
@@ -111,7 +111,7 @@ CardTest >> testAGameWithASpeedCard [
 
 	| aGame aDie aBoard aDice aLeader |
 	player1 drawCardFrom: speedDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	aGame speedCardUsedBy: player1 targetting: player1.
 	aGame moveCurrentPlayer.
 	aLeader := aGame leaderPosition.
@@ -127,7 +127,7 @@ CardTest >> testAGameWithASpeedCardAndBoost [
 	aDie := LoadedDie rolling: 4.
 	aDice := Dice with: {aDie}.
 	aBoard := Board sizedWithNoEffects: 6.
-	aGame := self generateDefaultGame.
+	aGame := self generateDefaultGame..
 	aGame speedCardUsedBy: player1 targetting: player1.
 	aGame boostCardUsedBy: player1 targetting: player1 boosting: speedCard.
 	aGame moveCurrentPlayer.
@@ -141,7 +141,7 @@ CardTest >> testAGameWithASpeedCardAndCancellation [
 	| aGame aDie aBoard aDice aLeader |
 	player1 drawCardFrom: speedDeck.
 	player1 drawCardFrom: cancellationDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	aGame speedCardUsedBy: player1 targetting: player1.
 	aGame cancellationCardUsedBy: player1 targetting: player1 removing: speedCard.
 	aGame moveCurrentPlayer.
@@ -308,7 +308,7 @@ CardTest >> testAGameWithAnOverloadCard [
 
 	| aGame aDie aBoard aDice |
 	player1 drawCardFrom: overloadDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	aGame overloadCardUsedBy: player1 targetting: player1.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
@@ -344,7 +344,7 @@ CardTest >> testAGameWithAnOverloadCardOnTwoPlayers [
 
 	| aGame aDie aBoard aDice |
 	player1 drawCardFrom: overloadDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	self
 		should: [ aGame overloadCardUsedBy: player1 targetting: {player1.player2}. ]
 		raise: Error
@@ -356,7 +356,7 @@ CardTest >> testAGameWithAnSpeedCardOnTwoPlayers [
 
 	| aGame aDie aBoard aDice |
 	player1 drawCardFrom: speedDeck .
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	self
 		should: [ aGame speedCardUsedBy: player1 targetting: {player1.player2} ]
 		raise: Error
@@ -418,7 +418,7 @@ CardTest >> testAGameWithRedoAnOverload [
 	| aGame aDie aBoard aDice |
 	player1 drawCardFrom: overloadDeck.
 	player1 drawCardFrom: redoDeck.
-	aGame := self generateDefaultGame
+	aGame := self generateDefaultGame.
 	aGame overloadCardUsedBy: player1 targetting: player1.
 	aGame redoCardUsedBy: player1 targetting: player2.
 	aGame moveCurrentPlayer.
