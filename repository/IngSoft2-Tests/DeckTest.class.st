@@ -41,7 +41,7 @@ DeckTest >> setUp [
 	cancellationCard := Cancellation new
 ]
 
-{ #category : #asserting }
+{ #category : #assertions }
 DeckTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErrorMessage [
 
 	self

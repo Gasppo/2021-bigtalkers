@@ -4,14 +4,14 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #asserting }
+{ #category : #assertions }
 Speed >> assertIsTurnOf: aPlayer for: aGame [ 
 
 	aGame currentTurnPlayer  ~= aPlayer ifTrue: [ Error
 				signal: 'Players can only play permanent cards during their turn' ].
 ]
 
-{ #category : #asserting }
+{ #category : #assertions }
 Speed >> assertOnlyOnePlayerOn: target [
 
 	(target isCollection and: [ target size > 1 ]) ifTrue: [ 

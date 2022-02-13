@@ -43,7 +43,7 @@ CardTest >> setUp [
 	cancellationCard := Cancellation new
 ]
 
-{ #category : #asserting }
+{ #category : #assertions }
 CardTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErrorMessage [
 
 	self
