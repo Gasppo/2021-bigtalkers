@@ -9,7 +9,7 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #asserting }
+{ #category : #assertions }
 ItemGeneratorTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErrorMessage [
 
 	self

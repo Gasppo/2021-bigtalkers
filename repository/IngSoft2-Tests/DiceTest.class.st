@@ -4,7 +4,7 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #asserting }
+{ #category : #assertions }
 DiceTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErrorMessage [
 
 	self
