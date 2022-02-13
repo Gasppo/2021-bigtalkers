@@ -60,7 +60,8 @@ GameTest >> testAGameWithScoreboardMovesForward [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: ((aGame currentSlotOf: player1) between: 1 and: 4).
 	self assert: (aGame currentSlotOf: player2) equals: 0
@@ -78,7 +79,8 @@ GameTest >> testAGameWithTwoPlayersAndADieAndABoardHasNotFinished [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	self deny: aGame hasFinished
 ]
 
@@ -94,7 +96,8 @@ GameTest >> testCannotCreateAGameWithNoPlayers [
 				playedBy: {}
 				usingDice: aDice
 				playedOn: aBoard
-				finishingAtLap: 1 ]
+				finishingAtLap: 1
+				usingDeck: Deck default. ]
 		raise: Error
 		withMessage: 'You need at least one player to play'
 ]
@@ -112,7 +115,8 @@ GameTest >> testCheckLeaderName [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: aGame leader equals: player1
 ]
@@ -131,7 +135,8 @@ GameTest >> testCheckPlayerLapAndPositionAfterMoving [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	10 timesRepeat: [ aGame moveCurrentPlayer ].
 	self assert: (aGame currentLapOf: player1) equals: 1.
 	self assert: (aGame currentSlotOf: player1) equals: 1
@@ -151,7 +156,8 @@ GameTest >> testCheckPlayerPosition [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
@@ -172,7 +178,8 @@ GameTest >> testCheckPlayerPositionsWithATie [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame rankOf: player2) equals: 2
 ]
@@ -191,7 +198,8 @@ GameTest >> testCheckPlayerTurn [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	self assert: aGame currentTurnPlayer equals: player1
 ]
 
@@ -209,7 +217,8 @@ GameTest >> testCheckPlayerTurnAfterMove [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: aGame currentTurnPlayer equals: player2
 ]
@@ -227,7 +236,8 @@ GameTest >> testCheckRankingPositions [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
@@ -247,7 +257,8 @@ GameTest >> testCreateAGameWithDefaultValues [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	aLeader := aGame leaderPosition.
 	self assert: (aLeader between: 1 and: 4)
@@ -265,7 +276,8 @@ GameTest >> testCreateAGameWithScoreboard [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	self assert: (aGame currentSlotOf: player1) equals: 0.
 	self assert: (aGame currentSlotOf: player2) equals: 0
 ]
@@ -284,7 +296,8 @@ GameTest >> testGameControlledMovement [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
@@ -334,7 +347,8 @@ GameTest >> testGameFinishedAndStillMovePlayer [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self
 		should: [ aGame moveCurrentPlayer ]
@@ -378,7 +392,8 @@ GameTest >> testGameFinishedWithWinner [
 			player3}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: aGame hasFinished.
 	self assert: aGame leader equals: player1
@@ -403,7 +418,8 @@ GameTest >> testGamePlayerOneFallsInAtomicBomb [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 0.
 	self assert: (aGame currentSlotOf: player2) equals: 0
@@ -455,7 +471,8 @@ GameTest >> testGamePlayerOneFallsInMoonWalkAndWouldHaveNegativeLaps [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 4.
 	self assert: (aGame currentSlotOf: player2) equals: 0
@@ -506,7 +523,8 @@ GameTest >> testGamePlayerOneFallsInWormhole [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 2
 ]
@@ -527,7 +545,8 @@ GameTest >> testGameWithTwoPlayersWithSameName [
 					player3}
 				usingDice: aDice
 				playedOn: aBoard
-				finishingAtLap: 1 ]
+				finishingAtLap: 1
+				usingDeck: Deck default. ]
 		raise: Error
 		withMessage: 'There can not be two players with the same name'
 ]
