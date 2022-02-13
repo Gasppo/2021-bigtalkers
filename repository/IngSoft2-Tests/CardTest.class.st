@@ -23,6 +23,22 @@ Class {
 }
 
 { #category : #running }
+CardTest >> generateDefaultGame [
+
+	| aDie aBoard aDice |
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 6.
+	^ BigTalkGame
+		  playedBy: { 
+				  player1.
+				  player2 }
+		  usingDice: aDice
+		  playedOn: aBoard
+		  finishingAtLap: 1
+]
+
+{ #category : #running }
 CardTest >> setUp [
 
 	player1 := Player named: 'Gaspar'.
@@ -129,13 +145,7 @@ CardTest >> testAGameWithASpeedCardAndBoost [
 	aDie := LoadedDie rolling: 4.
 	aDice := Dice with: {aDie}.
 	aBoard := Board sizedWithNoEffects: 6.
-	aGame := BigTalkGame
-		playedBy:
-			{player1.
-			player2}
-		usingDice: aDice
-		playedOn: aBoard
-		finishingAtLap: 1.
+	aGame := self generateDefaultGame.
 	aGame speedCardUsedBy: player1 targetting: player1.
 	aGame boostCardUsedBy: player1 targetting: player1 boosting: speedCard.
 	aGame moveCurrentPlayer.
