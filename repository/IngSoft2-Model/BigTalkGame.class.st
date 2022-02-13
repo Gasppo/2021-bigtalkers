@@ -159,6 +159,20 @@ BigTalkGame >> assertGameIsNotFinished [
 	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
 ]
 
+{ #category : #'effect-application' }
+BigTalkGame >> boostActiveCard: aCard from: target [
+
+	activeCards boost: aCard from: target
+]
+
+{ #category : #'playing - card usage' }
+BigTalkGame >> boostCardUsedBy: aPlayer targetting: target boosting: aBoostedCard [ 
+
+self player: aPlayer usesCard: Boost new  on: {aBoostedCard.target}.
+self addCardToDiscardDeck: Boost new .
+
+]
+
 { #category : #'playing - card usage' }
 BigTalkGame >> cancellationCardUsedBy: aPlayer targetting: target removing: aCancelledCard [ 
 
@@ -179,19 +193,19 @@ BigTalkGame >> changeTurn [
 	currentPlayer := turn next
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentLapOf: aPlayer [
 
 	^ board currentLapOf: aPlayer
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentSlotOf: aPlayer [
 
 	^ board currentSlotOf: aPlayer
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> currentTurnPlayer [
 
 	^ currentPlayer
@@ -308,7 +322,7 @@ BigTalkGame >> playersDrawStartingCards [
 			player drawCardFrom: deck ]
 ]
 
-{ #category : #'accesing - player' }
+{ #category : #'accessing - player' }
 BigTalkGame >> rankOf: aPlayer [
 
 	^ scoreboard rankOf: aPlayer

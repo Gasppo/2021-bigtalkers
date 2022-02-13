@@ -16,7 +16,8 @@ Class {
 		'accelerationCard',
 		'repeatCard',
 		'redoCard',
-		'cancellationCard'
+		'cancellationCard',
+		'boostDeck'
 	],
 	#category : #'IngSoft2-Tests'
 }
@@ -33,6 +34,7 @@ CardTest >> setUp [
 	repeatDeck := TestingDeck onlyRepeatCards.
 	accelerationDeck := TestingDeck onlyAccelerationCards.
 	cancellationDeck := TestingDeck onlyCancellationCards.
+	boostDeck := TestingDeck onlyBoostCards.
 	speedCard := Speed new.
 	overloadCard := Overload new.
 	accelerationCard := Acceleration new.
@@ -116,6 +118,29 @@ CardTest >> testAGameWithASpeedCard [
 	aGame moveCurrentPlayer.
 	aLeader := aGame leaderPosition.
 	self assert: aLeader equals: 5
+]
+
+{ #category : #tests }
+CardTest >> testAGameWithASpeedCardAndBoost [
+
+	| aGame aDie aBoard aDice aLeader |
+	player1 drawCardFrom: speedDeck.
+	player1 drawCardFrom: boostDeck.
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 6.
+	aGame := BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1.
+	aGame speedCardUsedBy: player1 targetting: player1.
+	aGame boostCardUsedBy: player1 targetting: player1 boosting: speedCard.
+	aGame moveCurrentPlayer.
+	aLeader := aGame leaderPosition.
+	self assert: aLeader equals: 6
 ]
 
 { #category : #tests }
@@ -315,6 +340,29 @@ CardTest >> testAGameWithAnOverloadCard [
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 2.
 	self assert: (aGame currentSlotOf: player2) equals: 4
+]
+
+{ #category : #tests }
+CardTest >> testAGameWithAnOverloadCardAndBoost [
+
+	| aGame aDie aBoard aDice aLeader |
+	player1 drawCardFrom: overloadDeck.
+	player1 drawCardFrom: boostDeck.
+	aDie := LoadedDie rolling: 8.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 20.
+	aGame := BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1.
+	aGame overloadCardUsedBy: player1 targetting: player1.
+	aGame boostCardUsedBy: player1 targetting: player1 boosting: overloadCard .
+	aGame moveCurrentPlayer.
+	aLeader := aGame leaderPosition.
+	self assert: aLeader equals: 4
 ]
 
 { #category : #tests }

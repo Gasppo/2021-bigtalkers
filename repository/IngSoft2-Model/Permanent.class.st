@@ -14,10 +14,16 @@ Permanent >> applyOn: aGame to: target [
 	
 ]
 
+{ #category : #'private - validations' }
+Permanent >> boost [
+
+	effect := effect * 2
+]
+
 { #category : #'accessing - effect' }
 Permanent >> effect [
 
-	^ self subclassResponsibility
+	^ effect
 ]
 
 { #category : #'private - validations' }

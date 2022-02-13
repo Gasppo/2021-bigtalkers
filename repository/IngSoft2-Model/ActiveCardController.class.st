@@ -22,6 +22,19 @@ ActiveCardController >> add: aCard to: aPlayer [
 	cardregistry at: aPlayer put: currCards
 ]
 
+{ #category : #'accessing - adding/removing' }
+ActiveCardController >> boost: aCard from: aPlayer [
+
+	| currCards boostedCard |
+	currCards := cardregistry at: aPlayer.
+	boostedCard := currCards
+		               remove: aCard
+		               ifAbsent: [ 
+		               Error signal: 'The player does not have that card' ].
+	boostedCard boost.
+	self add: boostedCard to: aPlayer
+]
+
 { #category : #initialization }
 ActiveCardController >> initializeWith: somePlayers [
 

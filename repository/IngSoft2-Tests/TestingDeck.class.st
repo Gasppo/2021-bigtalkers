@@ -22,6 +22,23 @@ TestingDeck class >> onlyAccelerationCards [
 ]
 
 { #category : #'instance creation' }
+TestingDeck class >> onlyBoostCards [
+
+	| eventsDistribution cardDistribution generator |
+	eventsDistribution := OrderedCollection new.
+	eventsDistribution add:
+		(DiscreteProbabilityEvent of: Boost new havingProbability: 1).
+
+	cardDistribution := OrderedCollection new.
+	generator := DistributionItemGenerator basedOn: eventsDistribution.
+
+
+	1 to: 100 do: [ :index | cardDistribution add: generator generate ].
+
+	^ self new initializeWith: cardDistribution
+]
+
+{ #category : #'instance creation' }
 TestingDeck class >> onlyCancellationCards [
 
 	| eventsDistribution cardDistribution generator |

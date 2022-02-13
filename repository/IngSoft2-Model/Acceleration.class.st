@@ -4,10 +4,9 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'accessing - effect' }
-Acceleration >> effect [
-
-	^ 1
+{ #category : #initialization }
+Acceleration >> initialize [ 
+	effect := 1
 ]
 
 { #category : #'private - validations' }
