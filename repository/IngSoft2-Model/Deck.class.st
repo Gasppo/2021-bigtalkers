@@ -27,12 +27,6 @@ Deck class >> empty [
 ]
 
 { #category : #'instance creation' }
-Deck class >> using: cardTypes [
-
-	^ self new initializeWith: cardTypes
-]
-
-{ #category : #'instance creation' }
 Deck class >> withProbabilities: eventsDistribution usingCardAmount: amountOfCards [
 
 	| cardDistribution generator|
