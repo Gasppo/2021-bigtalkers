@@ -36,6 +36,7 @@ CardTest >> generateDefaultGame [
 		  usingDice: aDice
 		  playedOn: aBoard
 		  finishingAtLap: 1
+		  usingDeck: Deck default.
 ]
 
 { #category : #'testing - messages' }
@@ -51,7 +52,8 @@ CardTest >> generateEffectTestingGameWithBoardSlots: boardslots andDice: aDie [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 2.
+		finishingAtLap: 2
+		usingDeck: Deck default.
 ]
 
 { #category : #'testing - messages' }
@@ -323,7 +325,8 @@ CardTest >> testAGameWithAnOverloadCardAndBoost [
 			player2}
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame overloadCardUsedBy: player1 targetting: player1.
 	aGame boostCardUsedBy: player1 targetting: player1 boosting: overloadCard .
 	aGame moveCurrentPlayer.
@@ -370,7 +373,8 @@ CardTest >> testAGameWithDoubleRedoAnAcceleration [
 		playedBy: allPlayers
 		usingDice: aDice
 		playedOn: aBoard
-		finishingAtLap: 1.
+		finishingAtLap: 1
+		usingDeck: Deck default.
 	aGame accelerationCardUsedBy: player1.
 	aGame redoCardUsedBy: player1.
 	aGame redoCardUsedBy: player1.

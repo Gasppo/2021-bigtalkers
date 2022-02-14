@@ -37,7 +37,7 @@ DeckTest >> generateDefaultGame [
 
 	| aDie aBoard aDice |
 	aDie := LoadedDie rolling: 4.
-	aDice := Dice with: {aDie}.
+	aDice := Dice with: { aDie }.
 	aBoard := Board sizedWithNoEffects: 6.
 	^ BigTalkGame
 		  playedBy: { 
@@ -46,6 +46,7 @@ DeckTest >> generateDefaultGame [
 		  usingDice: aDice
 		  playedOn: aBoard
 		  finishingAtLap: 1
+		  usingDeck: Deck default
 ]
 
 { #category : #'testing - messages' }
@@ -169,6 +170,21 @@ DeckTest >> testGamePlayerTriesToDrawEmptyDeckAndDiscard [
 		should: [ aGame drawFromDeck: player1.]
 		raise: Error
 		withMessage: 'Cant draw from empty deck, and discard deck is empty'.
+
+]
+
+{ #category : #tests }
+DeckTest >> testGameWithoutEnoughCardsOnDeckToStart [
+
+	| repeatDistribution fourCardRepeatDeck |
+	repeatDistribution := self certainDistributionOf: repeatCard.
+	fourCardRepeatDeck := Deck withProbabilities: repeatDistribution usingCardAmount: 3.
+
+	
+	self
+		should: [ self generateGameWithDeck: fourCardRepeatDeck . ]
+		raise: Error
+		withMessage: 'Not enough cards in deck to start game'.
 
 ]
 
