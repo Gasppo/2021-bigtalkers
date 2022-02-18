@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-Scoreboard class >> competingPlayers: somePlayers [
-
-	^ self new initializeWith: somePlayers
-]
-
-{ #category : #'instance creation' }
 Scoreboard class >> competingPlayers: somePlayers finishingAtLap: aLapNumber [
 
 	^ self new initializeWith: somePlayers finishingAtLap: aLapNumber
@@ -34,14 +28,6 @@ Scoreboard >> findBestScore [
 Scoreboard >> hasFinished [ 
 
 	^self leaderLap >= finishLap 
-]
-
-{ #category : #initialization }
-Scoreboard >> initializeWith: somePlayers [
-
-	scoreboard := Dictionary new.
-	somePlayers
-		do: [ :player | scoreboard at: player put: Position startingPosition ]
 ]
 
 { #category : #initialization }
