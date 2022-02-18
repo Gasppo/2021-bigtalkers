@@ -250,12 +250,6 @@ BigTalkGame >> leader [
 ]
 
 { #category : #'accessing - leader' }
-BigTalkGame >> leaderLap [
-
-	^ scoreboard leaderLap
-]
-
-{ #category : #'accessing - leader' }
 BigTalkGame >> leaderPosition [
 
 	^ scoreboard leaderPosition
