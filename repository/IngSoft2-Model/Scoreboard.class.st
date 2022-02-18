@@ -14,6 +14,12 @@ Scoreboard class >> competingPlayers: somePlayers finishingAtLap: aLapNumber [
 	^ self new initializeWith: somePlayers finishingAtLap: aLapNumber
 ]
 
+{ #category : #assertions }
+Scoreboard >> assertGameIsNotFinished [
+
+	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
+]
+
 { #category : #private }
 Scoreboard >> findBestScore [
 
@@ -24,7 +30,7 @@ Scoreboard >> findBestScore [
 	^bestScore 
 ]
 
-{ #category : #testing }
+{ #category : #'accessing - leader' }
 Scoreboard >> hasFinished [ 
 
 	^self leaderLap >= finishLap 

@@ -150,12 +150,6 @@ BigTalkGame >> applyWormHoleTo: aPlayer [
 	self playerMove: aPlayer slots: -4
 ]
 
-{ #category : #assertions }
-BigTalkGame >> assertGameIsNotFinished [
-
-	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
-]
-
 { #category : #'effect-application' }
 BigTalkGame >> boostActiveCard: aCard from: target [
 
@@ -258,7 +252,7 @@ BigTalkGame >> leaderPosition [
 { #category : #playing }
 BigTalkGame >> moveCurrentPlayer [
 
-	self assertGameIsNotFinished.
+	scoreboard assertGameIsNotFinished.
 	self playerMoveAfterRoll: self currentTurnPlayer.
 	lastEffect := self applyCurrentEffect.
 	self changeTurn.
