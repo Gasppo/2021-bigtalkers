@@ -28,6 +28,26 @@ GameTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErro
 ]
 
 { #category : #tests }
+GameTest >> testAGameWithNegativeFinishingLap [
+
+	| aDice aBoard |
+	aDice := Dice with: {(Die withSides: 4)}.
+	aBoard := Board sizedWithNoEffects: 4.
+	self
+		should: [ BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: -1
+		usingDeck: Deck default. ]
+		raise: Error
+		withMessage: 'You need at least one lap per game' .
+
+]
+
+{ #category : #tests }
 GameTest >> testAGameWithScoreboardGetLeaderUsingRoll [
 
 	| aGame aDie aBoard aDice aLeader |
@@ -162,6 +182,30 @@ GameTest >> testCheckPlayerPosition [
 	aGame moveCurrentPlayer.
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player2) equals: 4
+]
+
+{ #category : #tests }
+GameTest >> testCheckPlayerPositionForPlayerNotInGame [
+
+
+	| aGame aDie aDice aBoard |
+	aDie := LoadedDie rolling: 4.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 20.
+	aGame := BigTalkGame
+		playedBy:
+			{player1.
+			player2}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1
+		usingDeck: Deck default.
+	aGame moveCurrentPlayer.
+	aGame moveCurrentPlayer.
+	aGame moveCurrentPlayer.
+	self should: [ (aGame currentSlotOf: player3) equals: 4. ]
+		raise: Error
+		withMessage: 'That player is not in the game'.
 ]
 
 { #category : #tests }

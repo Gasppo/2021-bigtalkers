@@ -11,7 +11,17 @@ Redo >> applyOn: aGame to: target [
 ]
 
 { #category : #'private - validations' }
+Redo >> assertLastCardUsedInGame: aGame [
+	| carda |
+	
+	carda := aGame lastCardUsed.
+	
+	carda ifNil: [ 
+		Error signal: 'No available card for Redo' ]
+]
+
+{ #category : #'private - validations' }
 Redo >> playableBy: aPlayer on: aGame affecting: target [
 
-	^ true
+	self assertLastCardUsedInGame: aGame
 ]

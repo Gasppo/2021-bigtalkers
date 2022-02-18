@@ -68,5 +68,5 @@ ActiveCardController >> remove: aCard from: aPlayer [
 	currCards := cardregistry at: aPlayer.
 	currCards
 		remove: aCard
-		ifAbsent: [ Error signal: 'The player does not have that card' ]
+		ifAbsent: [ Error signal: 'The player does not have that card active' ]
 ]
