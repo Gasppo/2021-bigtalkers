@@ -2,7 +2,8 @@ Class {
 	#name : #Scoreboard,
 	#superclass : #Object,
 	#instVars : [
-		'scoreboard'
+		'scoreboard',
+		'finishLap'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -11,6 +12,12 @@ Class {
 Scoreboard class >> competingPlayers: somePlayers [
 
 	^ self new initializeWith: somePlayers
+]
+
+{ #category : #'instance creation' }
+Scoreboard class >> competingPlayers: somePlayers finishingAtLap: aLapNumber [
+
+	^ self new initializeWith: somePlayers finishingAtLap: aLapNumber
 ]
 
 { #category : #private }
@@ -23,9 +30,24 @@ Scoreboard >> findBestScore [
 	^bestScore 
 ]
 
+{ #category : #testing }
+Scoreboard >> hasFinished [ 
+
+	^self leaderLap >= finishLap 
+]
+
 { #category : #initialization }
 Scoreboard >> initializeWith: somePlayers [
 
+	scoreboard := Dictionary new.
+	somePlayers
+		do: [ :player | scoreboard at: player put: Position startingPosition ]
+]
+
+{ #category : #initialization }
+Scoreboard >> initializeWith: somePlayers finishingAtLap: aLapNumber [
+	
+	finishLap := aLapNumber.
 	scoreboard := Dictionary new.
 	somePlayers
 		do: [ :player | scoreboard at: player put: Position startingPosition ]

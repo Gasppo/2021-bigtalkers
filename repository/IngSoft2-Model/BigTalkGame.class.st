@@ -9,7 +9,6 @@ Class {
 		'scoreboard',
 		'turn',
 		'currentPlayer',
-		'finishingLap',
 		'lastEffect'
 	],
 	#category : #'IngSoft2-Model'
@@ -223,13 +222,13 @@ BigTalkGame >> drawFromDeck: aPlayer [
 { #category : #'accessing - finishing' }
 BigTalkGame >> hasFinished [
 
-	^ self leaderLap >= finishingLap
+	^ scoreboard hasFinished 
 ]
 
 { #category : #initialization }
 BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: aBoard finishingAtLap: aLapNumber withDeck: aDeck [
 
-	finishingLap := aLapNumber.
+	
 	players := somePlayers.
 	dice := someDice.
 	board := aBoard.
@@ -237,7 +236,7 @@ BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: 
 	cardController := GameCardController usingDeck: aDeck onPlayers: somePlayers  .	
 	self playersDrawStartingCards.
 	lastEffect := NoEffect new.
-	scoreboard := Scoreboard competingPlayers: somePlayers.
+	scoreboard := Scoreboard competingPlayers: somePlayers finishingAtLap: aLapNumber .
 	scoreboard update: board playerPositions.
 	turn := SharedQueue new.
 	turn nextPutAll: players.
