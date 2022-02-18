@@ -2,6 +2,7 @@ Class {
 	#name : #BigTalkGame,
 	#superclass : #Object,
 	#instVars : [
+		'cardController',
 		'players',
 		'dice',
 		'board',
@@ -9,11 +10,7 @@ Class {
 		'turn',
 		'currentPlayer',
 		'finishingLap',
-		'activeCards',
-		'lastCardUsed',
-		'lastEffect',
-		'deck',
-		'discardDeck'
+		'lastEffect'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -90,21 +87,19 @@ self addCardToDiscardDeck: Acceleration new .
 { #category : #'accessing - game' }
 BigTalkGame >> activeCardStack [
 
-	^ activeCards 
+	^ cardController activeCardStack  
 ]
 
 { #category : #private }
 BigTalkGame >> addActiveCard: aCard on: target [
 
-	target isCollection
-		ifTrue: [ target do: [ :player | activeCards add: aCard to: player ] ]
-		ifFalse: [ activeCards add: aCard to: target ]
+	cardController addActiveCard: aCard on: target. 
 ]
 
 { #category : #private }
 BigTalkGame >> addCardToDiscardDeck: aCard [
 
-	discardDeck addCard: aCard
+	cardController addToDiscardDeck: aCard
 ]
 
 { #category : #'effect-application' }
@@ -128,7 +123,7 @@ BigTalkGame >> applyGrabCardTo: aPlayer [
 { #category : #'effect-application' }
 BigTalkGame >> applyLastCardTo: target [
 
-	lastCardUsed applyOn: self to: target
+	cardController lastCardUsed applyOn: self to: target
 ]
 
 { #category : #'effect-application' }
@@ -157,17 +152,6 @@ BigTalkGame >> applyWormHoleTo: aPlayer [
 ]
 
 { #category : #assertions }
-BigTalkGame >> assertDeckNotEmpty [
-
-	deck cardsRemaining > 0 ifFalse: [ self assertDiscardDeckNotEmpty ]
-]
-
-{ #category : #assertions }
-BigTalkGame >> assertDiscardDeckNotEmpty [
-	discardDeck cardsRemaining > 0 ifTrue: [ self rebuildDeck ] ifFalse: [ Error signal: 'Cant draw from empty deck, and discard deck is empty' ]
-]
-
-{ #category : #assertions }
 BigTalkGame >> assertGameIsNotFinished [
 
 	self hasFinished ifTrue: [ Error signal: 'The game has finished' ]
@@ -176,7 +160,7 @@ BigTalkGame >> assertGameIsNotFinished [
 { #category : #'effect-application' }
 BigTalkGame >> boostActiveCard: aCard from: target [
 
-	activeCards boost: aCard from: target
+	cardController boost: aCard from: target
 ]
 
 { #category : #'playing - card usage' }
@@ -197,7 +181,7 @@ self addCardToDiscardDeck: aCancelledCard .
 
 { #category : #'accessing - deck' }
 BigTalkGame >> cardsRemainingOnDeck [
-	^deck cardsRemaining 
+	^cardController remainingOnMainDeck
 ]
 
 { #category : #playing }
@@ -227,13 +211,13 @@ BigTalkGame >> currentTurnPlayer [
 
 { #category : #'accessing - deck' }
 BigTalkGame >> discardDeckSize [
-	^discardDeck cardsRemaining.
+	^cardController remainingOnDiscardDeck.
 ]
 
 { #category : #playing }
 BigTalkGame >> drawFromDeck: aPlayer [
-	self assertDeckNotEmpty.
-	aPlayer drawCardFrom: deck
+	cardController assertDeckNotEmpty.
+	aPlayer drawCardFrom: cardController mainDeck 
 ]
 
 { #category : #'accessing - finishing' }
@@ -250,10 +234,8 @@ BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: 
 	dice := someDice.
 	board := aBoard.
 	board addPlayers: somePlayers.
-	deck := aDeck.
-	discardDeck := Deck empty.
+	cardController := GameCardController usingDeck: aDeck onPlayers: somePlayers  .	
 	self playersDrawStartingCards.
-	activeCards := ActiveCardController forPlayers: somePlayers.
 	lastEffect := NoEffect new.
 	scoreboard := Scoreboard competingPlayers: somePlayers.
 	scoreboard update: board playerPositions.
@@ -303,7 +285,7 @@ BigTalkGame >> player: aPlayer usesCard: aCard on: target [
 	aPlayer useCardFromHand: aCard.
 	aCard applyOn: self to: target.
 	aCard = Redo new
-		ifFalse: [ lastCardUsed := aCard ]
+		ifFalse: [ cardController updatedLastCardTo: aCard ]
 ]
 
 { #category : #private }
@@ -316,7 +298,7 @@ BigTalkGame >> playerMove: aPlayer slots: aNumberOfSlots [
 BigTalkGame >> playerMoveAfterRoll: aPlayer [
 
 	| rollvalue modifier |
-	modifier := activeCards playerRollModifier: aPlayer.
+	modifier := cardController playerRollModifier: aPlayer.
 	rollvalue := dice roll + modifier.
 	board movePlayer: aPlayer to: rollvalue
 ]
@@ -330,22 +312,15 @@ BigTalkGame >> playerMoveToStart: aPlayer [
 { #category : #private }
 BigTalkGame >> playersDrawStartingCards [
 
-	players
-		do: [ :player | 
-			player drawCardFrom: deck.
-			player drawCardFrom: deck ]
+	players do: [ :player | 
+		player drawCardFrom: cardController mainDeck.
+		player drawCardFrom: cardController mainDeck]
 ]
 
 { #category : #'accessing - player' }
 BigTalkGame >> rankOf: aPlayer [
 
 	^ scoreboard rankOf: aPlayer
-]
-
-{ #category : #'private - deck' }
-BigTalkGame >> rebuildDeck [
-	deck := discardDeck shuffled.
-	discardDeck := Deck empty
 ]
 
 { #category : #'playing - card usage' }
@@ -365,7 +340,7 @@ self addCardToDiscardDeck: Redo new .
 { #category : #'effect-application' }
 BigTalkGame >> removeActiveCard: aCard from: target [
 
-	activeCards remove: aCard from: target
+	cardController removeActiveCard: aCard from: target
 ]
 
 { #category : #'playing - card usage' }
