@@ -119,6 +119,34 @@ CardTest >> testAGamePlayerPlaysCardNotInHand [
 ]
 
 { #category : #tests }
+CardTest >> testAGameUsingCardWhenFinished [
+
+
+	| aGame aDie aDice aBoard |
+	aDie := LoadedDie rolling: 6.
+	aDice := Dice with: {aDie}.
+	aBoard := Board sizedWithNoEffects: 5.
+	aGame := BigTalkGame
+		playedBy:
+			{player1.
+			player2.
+			player3}
+		usingDice: aDice
+		playedOn: aBoard
+		finishingAtLap: 1
+		usingDeck: TestingDeck onlySpeedCards.
+	
+	aGame moveCurrentPlayer.
+	self
+		should: [ aGame speedCardUsedBy: player2 targetting: player1. ]
+		raise: Error
+		withMessage: 'The game has finished' .
+	
+	
+	
+]
+
+{ #category : #tests }
 CardTest >> testAGameWithACancellationAndNoActiveCards [
 
 	| aGame aLeader |
@@ -132,6 +160,22 @@ CardTest >> testAGameWithACancellationAndNoActiveCards [
 	aGame moveCurrentPlayer.
 	aLeader := aGame leaderPosition.
 	self assert: aLeader equals: 4
+]
+
+{ #category : #tests }
+CardTest >> testAGameWithACancellationOnCardNotUsed [
+
+	| aGame |
+	player1 drawCardFrom: speedDeck.
+	player1 drawCardFrom: cancellationDeck.
+	aGame := self generateDefaultGame.
+	aGame speedCardUsedBy: player1 targetting: player1.
+	self
+		should: [ aGame cancellationCardUsedBy: player1 targetting: player1 removing: overloadCard .]
+		raise: Error
+		withMessage: 'The player does not have that card active'.
+	
+	
 ]
 
 { #category : #tests }
@@ -414,6 +458,24 @@ CardTest >> testAGameWithRedoAnOverload [
 	aGame moveCurrentPlayer.
 	self assert: (aGame currentSlotOf: player1) equals: 2.
 	self assert: (aGame currentSlotOf: player2) equals: 2
+]
+
+{ #category : #tests }
+CardTest >> testAGameWithRedoWithNoPreviousCards [
+
+	| aGame |
+	aGame := self generateDefaultGame.
+	player1 drawCardFrom: accelerationDeck.
+	player1 drawCardFrom: redoDeck.
+
+
+	self
+		should: [ aGame redoCardUsedBy: player1 ]
+		raise: Error
+		withMessage: 'No available card for Redo'.
+
+
+	
 ]
 
 { #category : #tests }

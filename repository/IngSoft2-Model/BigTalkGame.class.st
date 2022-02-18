@@ -237,6 +237,12 @@ BigTalkGame >> initializeWithPlayers: somePlayers withDice: someDice withBoard: 
 	currentPlayer := turn next
 ]
 
+{ #category : #'accessing - deck' }
+BigTalkGame >> lastCardUsed [ 
+
+	^cardController lastCardUsed 
+]
+
 { #category : #'accessing - leader' }
 BigTalkGame >> leader [
 
@@ -267,7 +273,8 @@ self player: aPlayer usesCard: Overload new  on: target.
 
 { #category : #private }
 BigTalkGame >> player: aPlayer usesCard: aCard on: target [
-
+	
+	scoreboard assertGameIsNotFinished.
 	self validatePlayabilityOn: aCard by: aPlayer affecting: target.
 	aPlayer useCardFromHand: aCard.
 	aCard applyOn: self to: target.

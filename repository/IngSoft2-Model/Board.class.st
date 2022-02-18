@@ -55,6 +55,14 @@ Board >> applyEffectTo: aGame toPlayer: aPlayer [
  	^effect
 ]
 
+{ #category : #assertions }
+Board >> assertPlayerInBoard: aPlayer [
+
+	playerPositions at: aPlayer ifAbsent: [ 
+			Error signal:
+				'That player is not in the game' ]
+]
+
 { #category : #'accessing - positions' }
 Board >> currentLapOf: aPlayer [
 
@@ -63,7 +71,7 @@ Board >> currentLapOf: aPlayer [
 
 { #category : #'accessing - positions' }
 Board >> currentSlotOf: aPlayer [
-
+	self assertPlayerInBoard: aPlayer.
 	^ (playerPositions at: aPlayer) getSlot
 ]
 

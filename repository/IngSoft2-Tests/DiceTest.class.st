@@ -18,6 +18,15 @@ DiceTest >> should: anErrorBlock raise: exceptionClass withMessage: expectedErro
 DiceTest >> testADieCannotHaveNegativeSides [
 
 	self
+		should: [ Die withSides: -2 ]
+		raise: Error
+		withMessage: 'Dice have to have at least 4 sides'
+]
+
+{ #category : #tests }
+DiceTest >> testADieCannotLessThanFourSides [
+
+	self
 		should: [ Die withSides: 2 ]
 		raise: Error
 		withMessage: 'Dice have to have at least 4 sides'
